@@ -216,7 +216,7 @@ This file was the main specification given to GitHub Copilot Agent Mode. It defi
 
 This was the core planning artifact that made the generated output more structured and consistent.
 
-## Tools / Models / MCP Used
+## Tools / Models 
 
 ### Tools and Models
 
@@ -240,8 +240,6 @@ A typical generated structure for this project includes:
 * `wwwroot/`
 
 ## How to Run
-
-> Update these commands if your actual solution name or startup project differs.
 
 ### Prerequisites
 
