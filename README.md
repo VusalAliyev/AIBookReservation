@@ -312,17 +312,17 @@ Based on the development process, the large majority of the code was AI-generate
 
 ## Screenshots from some pages
 
-- **Home Page**  
-  ![Home Page](./wwwroot/images/books/home.png)
+- **Home Page**
+  ![Home Page](./wwwroot/images/home.png)
 
-- **Book List Page**  
-  ![Book List Page](./wwwroot/images/home/books.png)
+- **Book List Page**
+  ![Book List Page](./wwwroot/images/books.png)
 
-- **Book Details Page**  
-  ![Book Details Page](./wwwroot/images/bookDetails/bookDetails.png)
+- **Book Details Page**
+  ![Book Details Page](./wwwroot/images/bookDetails.png)
 
-- **Librarian Dashboard**  
-  ![Librarian Dashboard](./wwwroot/images/adminDashboard/adminDashboard.png)
+- **Librarian Dashboard**
+  ![Librarian Dashboard](./wwwroot/images/adminDashboard.png)
 
-- **Student's Borrowed Books**  
-  ![Student's Borrowed Books](./wwwroot/images/studentBorrowedBooks/studentBorrowedBooks.png)
+- **Student's Borrowed Books**
+  ![Student's Borrowed Books](./wwwroot/images/studentBorrowedBooks.png)

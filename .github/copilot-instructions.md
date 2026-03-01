@@ -28,7 +28,7 @@ Use this exact development connection string unless explicitly changed later:
 Host=localhost;Port=5432;Database=ECommerceDB;Username=postgres;Password=password
 ```
 
-Note: the database name is `ECommerceDB` because it was explicitly provided. Do not rename it unless asked.
+Note: the database name is `LibraryDB` because it was explicitly provided. Do not rename it unless asked.
 
 ## Primary Objective
 Create a clean, maintainable, role-based MVP that follows standard ASP.NET Core MVC practices and enforces business rules on the server side.
