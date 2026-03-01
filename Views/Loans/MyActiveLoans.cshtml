@@ -1,0 +1,48 @@
+@model IEnumerable<BookReservation.Models.Loan>
+@{
+    ViewData["Title"] = "My Active Loans";
+}
+
+<h2>My Active Loans</h2>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Issued Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var loan in Model)
+            {
+                <tr>
+                    <td>@loan.Book?.Title</td>
+                    <td>@loan.Book?.Author</td>
+                    <td>@loan.IssuedDate.ToLocalTime().ToString("g")</td>
+                    <td>@loan.DueDate.ToLocalTime().ToString("g")</td>
+                    <td>
+                        @if (loan.IsOverdue)
+                        {
+                            <span class="badge bg-danger">Overdue</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        You have no active loans.
+    </div>
+}

@@ -1,0 +1,68 @@
+@model IEnumerable<BookReservation.Models.Book>
+@{
+    ViewData["Title"] = "Books";
+}
+
+<h2>Available Books</h2>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" name="searchTerm" class="form-control" placeholder="Search by title or author" value="@ViewBag.SearchTerm" />
+            </div>
+            <div class="col-md-3">
+                <select name="categoryId" class="form-select">
+                    <option value="">All Categories</option>
+                    @foreach (var category in (IEnumerable<BookReservation.Models.Category>)ViewBag.Categories)
+                    {
+                        <option value="@category.Id" selected="@(ViewBag.CategoryId == category.Id)">@category.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a asp-action="Index" class="btn btn-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var book in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@book.Title</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
+                    <p class="card-text">
+                        <span class="badge bg-secondary">@book.Category?.Name</span>
+                        @if (book.AvailableCount > 0)
+                        {
+                            <span class="badge bg-success">@book.AvailableCount Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Not Available</span>
+                        }
+                    </p>
+                    @if (!string.IsNullOrWhiteSpace(book.Description))
+                    {
+                        <p class="card-text">@(book.Description.Length > 100 ? book.Description.Substring(0, 100) + "..." : book.Description)</p>
+                    }
+                </div>
+                <div class="card-footer">
+                    <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No books found matching your search criteria.
+    </div>
+}

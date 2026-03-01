@@ -1,0 +1,61 @@
+@model IEnumerable<BookReservation.Models.Loan>
+@{
+    ViewData["Title"] = "Active Loans";
+}
+
+<h2>Active Loans</h2>
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-secondary">View All Loans</a>
+    <a asp-action="Overdue" class="btn btn-danger">View Overdue</a>
+</div>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Issued Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var loan in Model)
+            {
+                <tr class="@(loan.IsOverdue ? "table-danger" : "")">
+                    <td>@loan.Student?.FullName</td>
+                    <td>@loan.Book?.Title</td>
+                    <td>@loan.Book?.Author</td>
+                    <td>@loan.IssuedDate.ToLocalTime().ToString("g")</td>
+                    <td>@loan.DueDate.ToLocalTime().ToString("g")</td>
+                    <td>
+                        @if (loan.IsOverdue)
+                        {
+                            <span class="badge bg-danger">Overdue</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="Return" asp-route-id="@loan.Id" method="post" class="d-inline" onsubmit="return confirm('Mark this loan as returned?');">
+                            <button type="submit" class="btn btn-sm btn-primary">Mark Returned</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No active loans at this time.
+    </div>
+}

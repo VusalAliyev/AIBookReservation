@@ -1,0 +1,70 @@
+@model BookReservation.ViewModels.BookViewModel
+@{
+    ViewData["Title"] = "Create Book";
+}
+
+<h2>Create New Book</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Author" class="form-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="ISBN" class="form-label"></label>
+                <input asp-for="ISBN" class="form-control" />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" class="form-select">
+                    <option value="">Select a category</option>
+                    @foreach (var category in (IEnumerable<BookReservation.Models.Category>)ViewBag.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="TotalCount" class="form-label"></label>
+                <input asp-for="TotalCount" class="form-control" type="number" />
+                <span asp-validation-for="TotalCount" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="AvailableCount" class="form-label"></label>
+                <input asp-for="AvailableCount" class="form-control" type="number" />
+                <span asp-validation-for="AvailableCount" class="text-danger"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

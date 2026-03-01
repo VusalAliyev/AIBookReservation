@@ -1,0 +1,67 @@
+@model IEnumerable<BookReservation.Models.Loan>
+@{
+    ViewData["Title"] = "All Loans";
+}
+
+<h2>All Loans</h2>
+
+<div class="mb-3">
+    <a asp-action="Active" class="btn btn-primary">View Active Only</a>
+    <a asp-action="Overdue" class="btn btn-danger">View Overdue</a>
+</div>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Book</th>
+                <th>Issued Date</th>
+                <th>Due Date</th>
+                <th>Returned Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var loan in Model)
+            {
+                <tr>
+                    <td>@loan.Student?.FullName</td>
+                    <td>@loan.Book?.Title</td>
+                    <td>@loan.IssuedDate.ToLocalTime().ToString("g")</td>
+                    <td>@loan.DueDate.ToLocalTime().ToString("g")</td>
+                    <td>@(loan.ReturnedDate?.ToLocalTime().ToString("g") ?? "-")</td>
+                    <td>
+                        @if (loan.IsReturned)
+                        {
+                            var wasLate = loan.ReturnedDate.Value > loan.DueDate;
+                            if (wasLate)
+                            {
+                                <span class="badge bg-warning">Returned Late</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Returned</span>
+                            }
+                        }
+                        else if (loan.IsOverdue)
+                        {
+                            <span class="badge bg-danger">Overdue</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-primary">Active</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No loans in the system yet.
+    </div>
+}

@@ -1,0 +1,60 @@
+@model IEnumerable<BookReservation.Models.BorrowRequest>
+@{
+    ViewData["Title"] = "Pending Requests";
+}
+
+<h2>Pending Borrow Requests</h2>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Available</th>
+                <th>Requested At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in Model)
+            {
+                <tr>
+                    <td>@request.Student?.FullName</td>
+                    <td>@request.Book?.Title</td>
+                    <td>@request.Book?.Author</td>
+                    <td>
+                        @if (request.Book != null && request.Book.AvailableCount > 0)
+                        {
+                            <span class="badge bg-success">@request.Book.AvailableCount</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">0</span>
+                        }
+                    </td>
+                    <td>@request.RequestedAt.ToLocalTime().ToString("g")</td>
+                    <td>
+                        <form asp-action="Accept" asp-route-id="@request.Id" method="post" class="d-inline" onsubmit="return confirm('Accept this request and create a loan?');">
+                            <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                        </form>
+                        <form asp-action="Deny" asp-route-id="@request.Id" method="post" class="d-inline" onsubmit="return confirm('Deny this request?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No pending requests at this time.
+    </div>
+}
+
+<hr />
+<a asp-action="Index" class="btn btn-secondary">View All Requests</a>

@@ -1,0 +1,64 @@
+@model IEnumerable<BookReservation.Models.BorrowRequest>
+@{
+    ViewData["Title"] = "My Requests";
+}
+
+<h2>My Borrow Requests</h2>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Requested At</th>
+                <th>Status</th>
+                <th>Processed At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in Model)
+            {
+                <tr>
+                    <td>@request.Book?.Title</td>
+                    <td>@request.Book?.Author</td>
+                    <td>@request.RequestedAt.ToLocalTime().ToString("g")</td>
+                    <td>
+                        @switch (request.Status)
+                        {
+                            case BookReservation.Models.RequestStatus.Pending:
+                                <span class="badge bg-warning">Pending</span>
+                                break;
+                            case BookReservation.Models.RequestStatus.Accepted:
+                                <span class="badge bg-success">Accepted</span>
+                                break;
+                            case BookReservation.Models.RequestStatus.Denied:
+                                <span class="badge bg-danger">Denied</span>
+                                break;
+                            case BookReservation.Models.RequestStatus.Cancelled:
+                                <span class="badge bg-secondary">Cancelled</span>
+                                break;
+                        }
+                    </td>
+                    <td>@(request.ProcessedAt?.ToLocalTime().ToString("g") ?? "-")</td>
+                    <td>
+                        @if (request.Status == BookReservation.Models.RequestStatus.Pending)
+                        {
+                            <form asp-action="Cancel" asp-route-id="@request.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this request?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        You have no borrow requests yet. <a asp-controller="Books" asp-action="Index">Browse books</a> to get started.
+    </div>
+}

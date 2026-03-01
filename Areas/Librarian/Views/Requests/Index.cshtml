@@ -1,0 +1,59 @@
+@model IEnumerable<BookReservation.Models.BorrowRequest>
+@{
+    ViewData["Title"] = "All Requests";
+}
+
+<h2>All Borrow Requests</h2>
+
+<div class="mb-3">
+    <a asp-action="Pending" class="btn btn-primary">View Pending Only</a>
+</div>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Book</th>
+                <th>Requested At</th>
+                <th>Status</th>
+                <th>Processed At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in Model)
+            {
+                <tr>
+                    <td>@request.Student?.FullName</td>
+                    <td>@request.Book?.Title</td>
+                    <td>@request.RequestedAt.ToLocalTime().ToString("g")</td>
+                    <td>
+                        @switch (request.Status)
+                        {
+                            case BookReservation.Models.RequestStatus.Pending:
+                                <span class="badge bg-warning">Pending</span>
+                                break;
+                            case BookReservation.Models.RequestStatus.Accepted:
+                                <span class="badge bg-success">Accepted</span>
+                                break;
+                            case BookReservation.Models.RequestStatus.Denied:
+                                <span class="badge bg-danger">Denied</span>
+                                break;
+                            case BookReservation.Models.RequestStatus.Cancelled:
+                                <span class="badge bg-secondary">Cancelled</span>
+                                break;
+                        }
+                    </td>
+                    <td>@(request.ProcessedAt?.ToLocalTime().ToString("g") ?? "-")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No requests in the system yet.
+    </div>
+}

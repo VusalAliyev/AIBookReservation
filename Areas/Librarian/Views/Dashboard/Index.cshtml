@@ -1,0 +1,60 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Librarian Dashboard</h2>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Books</h5>
+                <h2>@ViewBag.TotalBooks</h2>
+                <p class="card-text">@ViewBag.AvailableBooks available</p>
+                <a asp-controller="Books" asp-action="Index" class="btn btn-light">Manage Books</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Pending Requests</h5>
+                <h2>@ViewBag.PendingRequests</h2>
+                <p class="card-text">Awaiting approval</p>
+                <a asp-controller="Requests" asp-action="Pending" class="btn btn-light">View Requests</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Active Loans</h5>
+                <h2>@ViewBag.ActiveLoans</h2>
+                <p class="card-text">@ViewBag.OverdueLoans overdue</p>
+                <a asp-controller="Loans" asp-action="Active" class="btn btn-light">View Loans</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h4>Quick Actions</h4>
+        <div class="list-group">
+            <a asp-controller="Books" asp-action="Create" class="list-group-item list-group-item-action">
+                Add New Book
+            </a>
+            <a asp-controller="Categories" asp-action="Index" class="list-group-item list-group-item-action">
+                Manage Categories
+            </a>
+            <a asp-controller="Students" asp-action="Index" class="list-group-item list-group-item-action">
+                View All Students
+            </a>
+            <a asp-controller="Loans" asp-action="Overdue" class="list-group-item list-group-item-action text-danger">
+                View Overdue Loans
+            </a>
+        </div>
+    </div>
+</div>

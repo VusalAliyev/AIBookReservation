@@ -1,0 +1,74 @@
+@model BookReservation.Models.Book
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>@Model.Title</h2>
+        <h4 class="text-muted">by @Model.Author</h4>
+        <hr />
+        
+        <dl class="row">
+            <dt class="col-sm-3">Category</dt>
+            <dd class="col-sm-9">@Model.Category?.Name</dd>
+            
+            @if (!string.IsNullOrWhiteSpace(Model.ISBN))
+            {
+                <dt class="col-sm-3">ISBN</dt>
+                <dd class="col-sm-9">@Model.ISBN</dd>
+            }
+            
+            <dt class="col-sm-3">Total Count</dt>
+            <dd class="col-sm-9">@Model.TotalCount</dd>
+            
+            <dt class="col-sm-3">Available</dt>
+            <dd class="col-sm-9">
+                @if (Model.AvailableCount > 0)
+                {
+                    <span class="badge bg-success">@Model.AvailableCount Available</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Not Available</span>
+                }
+            </dd>
+            
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+            }
+        </dl>
+        
+        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Student"))
+        {
+            @if (ViewBag.CanRequest == true && Model.AvailableCount > 0)
+            {
+                <form asp-controller="Requests" asp-action="Create" method="post">
+                    <input type="hidden" name="bookId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-success">Request to Borrow</button>
+                </form>
+            }
+            else if (Model.AvailableCount <= 0)
+            {
+                <button class="btn btn-secondary" disabled>Not Available</button>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    You cannot request this book. You may already have a pending request or an active loan for this book.
+                </div>
+            }
+        }
+        else if (User.Identity?.IsAuthenticated != true)
+        {
+            <div class="alert alert-info">
+                <a asp-controller="Account" asp-action="Login">Login</a> to request this book.
+            </div>
+        }
+        
+        <hr />
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
