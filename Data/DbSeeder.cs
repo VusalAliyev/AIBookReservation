@@ -105,17 +105,17 @@ public class DbSeeder
             var science = _context.Categories.First(c => c.Name == "Science");
             var history = _context.Categories.First(c => c.Name == "History");
             var technology = _context.Categories.First(c => c.Name == "Technology");
-            
+
             var books = new[]
             {
-                new Book { Title = "To Kill a Mockingbird", Author = "Harper Lee", Description = "A classic American novel", ISBN = "978-0061120084", CategoryId = fiction.Id, TotalCount = 5, AvailableCount = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new Book { Title = "1984", Author = "George Orwell", Description = "Dystopian social science fiction", ISBN = "978-0451524935", CategoryId = fiction.Id, TotalCount = 3, AvailableCount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new Book { Title = "A Brief History of Time", Author = "Stephen Hawking", Description = "Science book about cosmology", ISBN = "978-0553380163", CategoryId = science.Id, TotalCount = 4, AvailableCount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new Book { Title = "Sapiens", Author = "Yuval Noah Harari", Description = "A brief history of humankind", ISBN = "978-0062316097", CategoryId = history.Id, TotalCount = 6, AvailableCount = 6, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new Book { Title = "Clean Code", Author = "Robert C. Martin", Description = "A handbook of agile software craftsmanship", ISBN = "978-0132350884", CategoryId = technology.Id, TotalCount = 2, AvailableCount = 0, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new Book { Title = "The Pragmatic Programmer", Author = "Andrew Hunt", Description = "Your journey to mastery", ISBN = "978-0135957059", CategoryId = technology.Id, TotalCount = 3, AvailableCount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+                new Book { Title = "To Kill a Mockingbird", Author = "Harper Lee", Description = "A classic American novel", ISBN = "978-0061120084", ImageUrl = "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400", CategoryId = fiction.Id, TotalCount = 5, AvailableCount = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new Book { Title = "1984", Author = "George Orwell", Description = "Dystopian social science fiction", ISBN = "978-0451524935", ImageUrl = "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400", CategoryId = fiction.Id, TotalCount = 3, AvailableCount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new Book { Title = "A Brief History of Time", Author = "Stephen Hawking", Description = "Science book about cosmology", ISBN = "978-0553380163", ImageUrl = "https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=400", CategoryId = science.Id, TotalCount = 4, AvailableCount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new Book { Title = "Sapiens", Author = "Yuval Noah Harari", Description = "A brief history of humankind", ISBN = "978-0062316097", ImageUrl = "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400", CategoryId = history.Id, TotalCount = 6, AvailableCount = 6, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new Book { Title = "Clean Code", Author = "Robert C. Martin", Description = "A handbook of agile software craftsmanship", ISBN = "978-0132350884", ImageUrl = "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400", CategoryId = technology.Id, TotalCount = 2, AvailableCount = 0, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new Book { Title = "The Pragmatic Programmer", Author = "Andrew Hunt", Description = "Your journey to mastery", ISBN = "978-0135957059", ImageUrl = "https://images.unsplash.com/photo-1589998059171-988d887df646?w=400", CategoryId = technology.Id, TotalCount = 3, AvailableCount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
             };
-            
+
             _context.Books.AddRange(books);
             await _context.SaveChangesAsync();
         }

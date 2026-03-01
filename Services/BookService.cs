@@ -63,36 +63,42 @@ public class BookService : IBookService
         var existing = await _context.Books.FindAsync(book.Id);
         if (existing == null)
             return null;
-        
+
         existing.Title = book.Title;
         existing.Author = book.Author;
         existing.Description = book.Description;
         existing.ISBN = book.ISBN;
+        existing.ImageUrl = book.ImageUrl;
         existing.CategoryId = book.CategoryId;
         existing.TotalCount = book.TotalCount;
         existing.AvailableCount = book.AvailableCount;
         existing.UpdatedAt = DateTime.UtcNow;
-        
+
         await _context.SaveChangesAsync();
-        
+
         return existing;
     }
-    
+
     public async Task<bool> DeleteBookAsync(int id)
     {
         var book = await _context.Books.FindAsync(id);
         if (book == null)
             return false;
-        
+
         var hasActiveLoans = await _context.Loans
             .AnyAsync(l => l.BookId == id && l.ReturnedDate == null);
-        
+
         if (hasActiveLoans)
             return false;
-        
+
         _context.Books.Remove(book);
         await _context.SaveChangesAsync();
-        
+
         return true;
+    }
+
+    public IQueryable<Book> GetBooksQueryable()
+    {
+        return _context.Books.AsQueryable();
     }
 }

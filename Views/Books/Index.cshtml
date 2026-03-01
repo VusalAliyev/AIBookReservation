@@ -1,15 +1,21 @@
-@model IEnumerable<BookReservation.Models.Book>
+@model BookReservation.ViewModels.PaginatedList<BookReservation.Models.Book>
 @{
     ViewData["Title"] = "Books";
 }
 
-<h2>Available Books</h2>
-
-<div class="row mb-3">
-    <div class="col-md-12">
+<div class="mb-4 fade-in">
+    <h2 class="mb-3">
+        <i class="bi bi-collection me-2"></i>Discover Books
+    </h2>
+    <div class="search-container">
         <form asp-action="Index" method="get" class="row g-3">
             <div class="col-md-4">
-                <input type="text" name="searchTerm" class="form-control" placeholder="Search by title or author" value="@ViewBag.SearchTerm" />
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="searchTerm" class="form-control border-start-0" placeholder="Search by title or author" value="@ViewBag.SearchTerm" />
+                </div>
             </div>
             <div class="col-md-3">
                 <select name="categoryId" class="form-select">
@@ -21,40 +27,62 @@
                 </select>
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Search</button>
-                <a asp-action="Index" class="btn btn-secondary">Clear</a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search me-1"></i>Search
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-1"></i>Clear
+                </a>
             </div>
         </form>
     </div>
 </div>
 
-<div class="row">
+<div class="book-grid">
     @foreach (var book in Model)
     {
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">@book.Title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
-                    <p class="card-text">
-                        <span class="badge bg-secondary">@book.Category?.Name</span>
-                        @if (book.AvailableCount > 0)
-                        {
-                            <span class="badge bg-success">@book.AvailableCount Available</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">Not Available</span>
-                        }
-                    </p>
-                    @if (!string.IsNullOrWhiteSpace(book.Description))
+        <div class="card fade-in">
+            @if (!string.IsNullOrWhiteSpace(book.ImageUrl))
+            {
+                <img src="@book.ImageUrl" class="card-img-top" alt="@book.Title">
+            }
+            else
+            {
+                <div class="card-img-top img-placeholder">
+                    <i class="bi bi-book"></i>
+                </div>
+            }
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">@book.Title</h5>
+                <h6 class="card-subtitle mb-3">
+                    <i class="bi bi-person me-1"></i>@book.Author
+                </h6>
+                <div class="mb-3">
+                    <span class="badge bg-secondary me-2">
+                        <i class="bi bi-tag me-1"></i>@book.Category?.Name
+                    </span>
+                    @if (book.AvailableCount > 0)
                     {
-                        <p class="card-text">@(book.Description.Length > 100 ? book.Description.Substring(0, 100) + "..." : book.Description)</p>
+                        <span class="badge bg-success">
+                            <i class="bi bi-check-circle me-1"></i>@book.AvailableCount Available
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">
+                            <i class="bi bi-x-circle me-1"></i>Not Available
+                        </span>
                     }
                 </div>
-                <div class="card-footer">
-                    <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-primary">View Details</a>
-                </div>
+                @if (!string.IsNullOrWhiteSpace(book.Description))
+                {
+                    <p class="card-text text-muted flex-grow-1">
+                        @(book.Description.Length > 100 ? book.Description.Substring(0, 100) + "..." : book.Description)
+                    </p>
+                }
+                <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-primary w-100 mt-auto">
+                    <i class="bi bi-eye me-1"></i>View Details
+                </a>
             </div>
         </div>
     }
@@ -62,7 +90,54 @@
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
-        No books found matching your search criteria.
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle me-2"></i>
+        No books found matching your search criteria. Try adjusting your filters.
     </div>
+}
+
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="Book pagination" class="mt-4">
+        <ul class="pagination pagination-lg justify-content-center">
+            <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" 
+                   asp-action="Index" 
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   asp-route-searchTerm="@ViewBag.SearchTerm"
+                   asp-route-categoryId="@ViewBag.CategoryId">
+                    <i class="bi bi-chevron-left"></i> Previous
+                </a>
+            </li>
+
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" 
+                       asp-action="Index" 
+                       asp-route-pageNumber="@i"
+                       asp-route-searchTerm="@ViewBag.SearchTerm"
+                       asp-route-categoryId="@ViewBag.CategoryId">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                <a class="page-link" 
+                   asp-action="Index" 
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   asp-route-searchTerm="@ViewBag.SearchTerm"
+                   asp-route-categoryId="@ViewBag.CategoryId">
+                    Next <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+        </ul>
+
+        <div class="text-center text-muted">
+            <small>
+                Showing @((Model.PageIndex - 1) * Model.PageSize + 1) - @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalCount)) of @Model.TotalCount books
+            </small>
+        </div>
+    </nav>
 }

@@ -1,57 +1,188 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to School Library System</h1>
-    <p class="lead">Your digital gateway to the school's book collection</p>
-    <hr class="my-4" />
+<div class="hero-section text-center fade-in">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-4">
+            <i class="bi bi-book-half me-3"></i>School Library System
+        </h1>
+        <p class="lead mb-5">Discover, Learn, and Grow with Our Digital Library</p>
 
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-        @if (User.IsInRole("Student"))
+        @if (User.Identity?.IsAuthenticated == true)
         {
-            <p>Browse and request books from our collection.</p>
-            <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-lg">Browse Books</a>
-            <a asp-controller="Requests" asp-action="MyRequests" class="btn btn-outline-primary btn-lg">My Requests</a>
+            @if (User.IsInRole("Student"))
+            {
+                <p class="fs-5 mb-4">Browse thousands of books and manage your reading journey</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a asp-controller="Books" asp-action="Index" class="btn btn-light btn-lg">
+                        <i class="bi bi-search me-2"></i>Browse Books
+                    </a>
+                    <a asp-controller="Requests" asp-action="MyRequests" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-inbox me-2"></i>My Requests
+                    </a>
+                </div>
+            }
+            else if (User.IsInRole("Librarian"))
+            {
+                <p class="fs-5 mb-4">Manage your library efficiently with powerful tools</p>
+                <a asp-area="Librarian" asp-controller="Dashboard" asp-action="Index" class="btn btn-light btn-lg">
+                    <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                </a>
+            }
         }
-        else if (User.IsInRole("Librarian"))
+        else
         {
-            <p>Manage the library system.</p>
-            <a asp-area="Librarian" asp-controller="Dashboard" asp-action="Index" class="btn btn-primary btn-lg">Go to Dashboard</a>
+            <p class="fs-5 mb-4">Join our community and unlock access to thousands of books</p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg">
+                    <i class="bi bi-person-plus me-2"></i>Register Now
+                </a>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                </a>
+            </div>
         }
-    }
-    else
-    {
-        <p>Please login or register to access the library system.</p>
-        <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg">Login</a>
-        <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-lg">Register as Student</a>
-    }
+    </div>
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Browse Books</h5>
-                <p class="card-text">Explore our extensive collection of books across various categories.</p>
-                <a asp-controller="Books" asp-action="Index" class="btn btn-sm btn-primary">View Books</a>
+<div class="my-5">
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 text-center fade-in" style="animation-delay: 0s;">
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="mb-4">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                             style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--ocean-blue), var(--dusky-blue));">
+                            <i class="bi bi-search text-white" style="font-size: 2.5rem;"></i>
+                        </div>
+                    </div>
+                    <h4 class="card-title">Discover Books</h4>
+                    <p class="card-text text-muted mb-4 flex-grow-1">
+                        Explore our extensive collection of books across various categories and find your next great read.
+                    </p>
+                    <a asp-controller="Books" asp-action="Index" class="btn btn-outline-primary w-100">
+                        Browse Collection <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 text-center fade-in" style="animation-delay: 0.1s;">
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="mb-4">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                             style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--golden-yellow), #f39c12);">
+                            <i class="bi bi-lightning-charge" style="font-size: 2.5rem; color: var(--dark-text);"></i>
+                        </div>
+                    </div>
+                    <h4 class="card-title">Easy Borrowing</h4>
+                    <p class="card-text text-muted mb-4 flex-grow-1">
+                        Request books online with just a few clicks and pick them up at your convenience.
+                    </p>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-controller="Requests" asp-action="MyRequests" class="btn btn-outline-warning w-100">
+                            My Requests <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-warning w-100">
+                            Get Started <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 text-center fade-in" style="animation-delay: 0.2s;">
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="mb-4">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                             style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--success-green), #229954);">
+                            <i class="bi bi-calendar-check text-white" style="font-size: 2.5rem;"></i>
+                        </div>
+                    </div>
+                    <h4 class="card-title">Track Your Loans</h4>
+                    <p class="card-text text-muted mb-4 flex-grow-1">
+                        Monitor your borrowed books, due dates, and maintain your complete reading history.
+                    </p>
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Student"))
+                    {
+                        <a asp-controller="Loans" asp-action="MyActiveLoans" class="btn btn-outline-success w-100">
+                            View Loans <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-success w-100">
+                            Sign In <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Easy Borrowing</h5>
-                <p class="card-text">Request books online and pick them up from the library.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Track Your Loans</h5>
-                <p class="card-text">Keep track of your borrowed books and due dates.</p>
+
+    <div class="row mt-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow-lg">
+                <div class="card-body p-5 text-center">
+                    <h2 class="mb-4">Why Choose Our Library System?</h2>
+                    <div class="row g-4 mt-3">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="p-3">
+                                <div class="mb-3">
+                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                         style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--ocean-blue), var(--dusky-blue));">
+                                        <i class="bi bi-globe text-white" style="font-size: 2rem;"></i>
+                                    </div>
+                                </div>
+                                <h6 class="fw-bold">Digital First</h6>
+                                <small class="text-muted">Modern online system</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="p-3">
+                                <div class="mb-3">
+                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                         style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--dusky-blue), var(--ocean-blue));">
+                                        <i class="bi bi-clock-fill text-white" style="font-size: 2rem;"></i>
+                                    </div>
+                                </div>
+                                <h6 class="fw-bold">24/7 Access</h6>
+                                <small class="text-muted">Browse anytime, anywhere</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="p-3">
+                                <div class="mb-3">
+                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                         style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--golden-yellow), #f39c12);">
+                                        <i class="bi bi-bell-fill text-white" style="font-size: 2rem;"></i>
+                                    </div>
+                                </div>
+                                <h6 class="fw-bold">Smart Alerts</h6>
+                                <small class="text-muted">Never miss a due date</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="p-3">
+                                <div class="mb-3">
+                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                         style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--success-green), #229954);">
+                                        <i class="bi bi-shield-check-fill text-white" style="font-size: 2rem;"></i>
+                                    </div>
+                                </div>
+                                <h6 class="fw-bold">Secure</h6>
+                                <small class="text-muted">Your data is protected</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

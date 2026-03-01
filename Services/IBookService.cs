@@ -10,4 +10,5 @@ public interface IBookService
     Task<Book> CreateBookAsync(Book book);
     Task<Book?> UpdateBookAsync(Book book);
     Task<bool> DeleteBookAsync(int id);
+    IQueryable<Book> GetBooksQueryable();
 }

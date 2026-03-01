@@ -1,33 +1,114 @@
-@model IEnumerable<BookReservation.Models.ApplicationUser>
+@model BookReservation.ViewModels.PaginatedList<BookReservation.Models.ApplicationUser>
 @{
     ViewData["Title"] = "Students";
 }
 
-<h2>All Students</h2>
+<div class="mb-4">
+    <h2><i class="bi bi-people me-2"></i>All Students</h2>
+    <p class="text-muted">Manage registered students in the system</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-10">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="searchTerm" class="form-control border-start-0" 
+                           placeholder="Search by name or email..." value="@ViewBag.SearchTerm" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search me-2"></i>Search
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 @if (Model.Any())
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Full Name</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-person me-1"></i>Full Name</th>
+                        <th><i class="bi bi-envelope me-1"></i>Email</th>
+                        <th><i class="bi bi-person-badge me-1"></i>Username</th>
+                    </tr>
+                </thead>
+                <tbody>
             @foreach (var student in Model)
             {
                 <tr>
                     <td>@student.FullName</td>
                     <td>@student.Email</td>
+                    <td>@student.UserName</td>
                 </tr>
             }
         </tbody>
     </table>
+        </div>
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Students pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                    <a class="page-link" 
+                       asp-action="Index" 
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       asp-route-searchTerm="@ViewBag.SearchTerm">
+                        <i class="bi bi-chevron-left"></i> Previous
+                    </a>
+                </li>
+
+                @for (var i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <a class="page-link" 
+                           asp-action="Index" 
+                           asp-route-pageNumber="@i"
+                           asp-route-searchTerm="@ViewBag.SearchTerm">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                    <a class="page-link" 
+                       asp-action="Index" 
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       asp-route-searchTerm="@ViewBag.SearchTerm">
+                        Next <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="text-center text-muted">
+                <small>
+                    Showing @((Model.PageIndex - 1) * Model.PageSize + 1) - @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalCount)) of @Model.TotalCount students
+                </small>
+            </div>
+        </nav>
+    }
 }
 else
 {
-    <div class="alert alert-info">
-        No students registered yet.
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle me-2"></i>
+        @if (!string.IsNullOrWhiteSpace(ViewBag.SearchTerm))
+        {
+            <text>No students found matching your search criteria.</text>
+        }
+        else
+        {
+            <text>No students registered yet.</text>
+        }
     </div>
 }

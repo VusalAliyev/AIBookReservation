@@ -3,64 +3,98 @@
     ViewData["Title"] = "Edit Book";
 }
 
-<h2>Edit Book</h2>
-<hr />
-
-<div class="row">
-    <div class="col-md-8">
-        <form asp-action="Edit" method="post">
+<div class="card shadow">
+    <div class="card-header bg-warning text-dark">
+        <h2 class="mb-0">
+            <i class="bi bi-pencil-square me-2"></i>Edit Book
+        </h2>
+    </div>
+    <div class="card-body p-4">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="Id" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-            <div class="mb-3">
-                <label asp-for="Title" class="form-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+            <input type="hidden" asp-for="ImageUrl" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+            {
+                <div class="mb-4 text-center">
+                    <label class="form-label d-block">Current Image</label>
+                    <img src="@Model.ImageUrl" alt="Current book cover" class="img-thumbnail" style="max-height: 200px;">
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Author" class="form-label"></label>
+                    <input asp-for="Author" class="form-control" />
+                    <span asp-validation-for="Author" class="text-danger"></span>
+                </div>
             </div>
-            
-            <div class="mb-3">
-                <label asp-for="Author" class="form-label"></label>
-                <input asp-for="Author" class="form-control" />
-                <span asp-validation-for="Author" class="text-danger"></span>
-            </div>
-            
+
             <div class="mb-3">
                 <label asp-for="Description" class="form-label"></label>
                 <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            
-            <div class="mb-3">
-                <label asp-for="ISBN" class="form-label"></label>
-                <input asp-for="ISBN" class="form-control" />
-                <span asp-validation-for="ISBN" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ISBN" class="form-label"></label>
+                    <input asp-for="ISBN" class="form-control" />
+                    <span asp-validation-for="ISBN" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CategoryId" class="form-label"></label>
+                    <select asp-for="CategoryId" class="form-select">
+                        @foreach (var category in (IEnumerable<BookReservation.Models.Category>)ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
             </div>
-            
+
             <div class="mb-3">
-                <label asp-for="CategoryId" class="form-label"></label>
-                <select asp-for="CategoryId" class="form-select">
-                    @foreach (var category in (IEnumerable<BookReservation.Models.Category>)ViewBag.Categories)
-                    {
-                        <option value="@category.Id">@category.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                <label asp-for="ImageFile" class="form-label">
+                    <i class="bi bi-upload me-1"></i>Update Image (Optional)
+                </label>
+                <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                <small class="form-text text-muted">Upload a new image to replace the current one</small>
             </div>
-            
-            <div class="mb-3">
-                <label asp-for="TotalCount" class="form-label"></label>
-                <input asp-for="TotalCount" class="form-control" type="number" />
-                <span asp-validation-for="TotalCount" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="TotalCount" class="form-label"></label>
+                    <input asp-for="TotalCount" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="TotalCount" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="AvailableCount" class="form-label"></label>
+                    <input asp-for="AvailableCount" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="AvailableCount" class="text-danger"></span>
+                </div>
             </div>
-            
-            <div class="mb-3">
-                <label asp-for="AvailableCount" class="form-label"></label>
-                <input asp-for="AvailableCount" class="form-control" type="number" />
-                <span asp-validation-for="AvailableCount" class="text-danger"></span>
+
+            <hr class="my-4">
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-save me-2"></i>Save Changes
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-2"></i>Cancel
+                </a>
             </div>
-            
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>
